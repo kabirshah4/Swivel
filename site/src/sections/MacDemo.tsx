@@ -36,7 +36,8 @@ export function MacDemo() {
   // Only tick while on screen: the loop re-renders every frame, so it stops when scrolled away
   // and replays the story from the top when you come back.
   const visible = useInView(ref, { margin: "100px" });
-  const t = useLoop(!reduce && visible);
+  const { fsRef, isFs, canFs, toggleFs } = useFullscreen<HTMLDivElement>();
+  const t = useLoop(!reduce && (visible || isFs));
 
   // Gaze: 0 = left display, 1 = right display
   const gaze = ease(seg(t, 3200, 3450)) - ease(seg(t, 7800, 8050));
@@ -52,6 +53,22 @@ export function MacDemo() {
 
   return (
     <figure ref={ref} className="mx-auto w-full max-w-[1040px]" aria-label="Illustration: typing in Notes on the left display; the user looks at the right display, and after a quarter of a second the keyboard focus moves to Messages, where the typing continues.">
+      <div
+        ref={fsRef}
+        className={`demo-fs relative ${canFs ? (isFs ? "cursor-zoom-out" : "cursor-zoom-in") : ""}`}
+        onClick={canFs ? toggleFs : undefined}
+      >
+      {canFs && (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); toggleFs(); }}
+          aria-label={isFs ? "Exit full screen" : "Watch the demo full screen"}
+          title={isFs ? "Exit full screen (Esc)" : "Full screen"}
+          className="glass-dark absolute right-[clamp(8px,1.5vw,20px)] top-[clamp(8px,1.5vw,20px)] z-30 grid size-9 place-items-center rounded-full text-white shadow-[0_8px_20px_-8px_rgba(0,0,0,.5)] transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          <FsGlyph exit={isFs} />
+        </button>
+      )}
       <div className="mac-stage relative [container-type:inline-size]" style={{ opacity: fade < 1 ? 0.35 + fade * 0.65 : 1 }}>
         <div className="mac-frame relative pt-[calc(var(--hu)*4.5)]">
           {/* Soft halo so the desk glows out of the sky */}
@@ -111,10 +128,54 @@ export function MacDemo() {
           </div>
         </div>
       </div>
+      </div>
       <figcaption className="mt-5 text-center text-[13px] text-[color:var(--color-ink-3)]">
         Illustration of Swivel at work. It runs quietly in your menu bar; the HUD here just shows what it sees.
       </figcaption>
     </figure>
+  );
+}
+
+type FsDoc = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => Promise<void> | void; webkitFullscreenEnabled?: boolean };
+type FsEl = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
+
+/** Element fullscreen with the webkit-prefixed fallback Safari still needs. canFs is false where
+ *  the browser can't do it (e.g. iPhone Safari), so the button and click target just don't appear. */
+function useFullscreen<T extends HTMLElement>() {
+  const fsRef = useRef<T>(null);
+  const [isFs, setIsFs] = useState(false);
+  const [canFs, setCanFs] = useState(false);
+  useEffect(() => {
+    const d = document as FsDoc;
+    setCanFs(Boolean(d.fullscreenEnabled || d.webkitFullscreenEnabled));
+    const sync = () => setIsFs((d.fullscreenElement ?? d.webkitFullscreenElement ?? null) === fsRef.current);
+    document.addEventListener("fullscreenchange", sync);
+    document.addEventListener("webkitfullscreenchange", sync);
+    return () => {
+      document.removeEventListener("fullscreenchange", sync);
+      document.removeEventListener("webkitfullscreenchange", sync);
+    };
+  }, []);
+  const toggleFs = () => {
+    const d = document as FsDoc;
+    const el = fsRef.current as FsEl | null;
+    if (!el) return;
+    if (d.fullscreenElement ?? d.webkitFullscreenElement) {
+      void (d.exitFullscreen ? d.exitFullscreen() : d.webkitExitFullscreen?.())?.catch?.(() => {});
+    } else {
+      void (el.requestFullscreen ? el.requestFullscreen() : el.webkitRequestFullscreen?.())?.catch?.(() => {});
+    }
+  };
+  return { fsRef, isFs, canFs, toggleFs };
+}
+
+function FsGlyph({ exit }: { exit: boolean }) {
+  return (
+    <svg viewBox="0 0 16 16" className="size-[15px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {exit
+        ? <path d="M6 2v4H2M10 2v4h4M6 14v-4H2M10 14v-4h4" />
+        : <path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" />}
+    </svg>
   );
 }
 
