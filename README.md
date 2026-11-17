@@ -17,9 +17,7 @@ A free macOS menu-bar app for multi-monitor setups. It uses your webcam to see w
   <img src="https://img.shields.io/github/stars/kabirshah4/Swivel?style=flat-square&color=0a84ff" alt="GitHub stars">
 </p>
 
-<!-- DEMO: record a 10-20s screen capture (glance between screens, typing follows), save as docs/demo.gif, then uncomment:
 <p align="center"><img src="docs/demo.gif" width="760" alt="Swivel moving keyboard focus as the user looks between two screens"></p>
--->
 
 ## Why
 
