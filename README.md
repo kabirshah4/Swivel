@@ -1,16 +1,39 @@
-<p align="center"><img src="docs/logo.png" width="160" alt="Swivel icon"></p>
+<p align="center"><img src="docs/logo.png" width="140" alt="Swivel icon"></p>
 
-# Swivel
+<h1 align="center">Swivel</h1>
 
-Look at a screen, and your keyboard follows. *(Formerly GazeHop.)*
+<p align="center"><b>Look at a screen, and your keyboard follows.</b><br/>
+A free macOS menu-bar app for multi-monitor setups. It uses your webcam to see which screen you're looking at, and moves keyboard focus there.</p>
 
-**Website:** https://swivel.gazehop-site.workers.dev
+<p align="center">
+  <a href="https://swivel.gazehop-site.workers.dev/download/Swivel.dmg"><img src="https://img.shields.io/badge/Download-Swivel.dmg-0a84ff?style=for-the-badge&logo=apple&logoColor=white" alt="Download Swivel.dmg"></a>
+</p>
 
-Swivel is a tiny macOS menu-bar app for multi-monitor setups: 2, 3, 4 or more screens. It uses your webcam to see
-which screen you're looking at and moves keyboard focus to the last window you used on that
-screen — so you stop typing into the window you just left.
+<p align="center">
+  <img src="https://img.shields.io/badge/macOS-14%2B-black?style=flat-square&logo=apple" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/price-free-2ea043?style=flat-square" alt="Free">
+  <img src="https://img.shields.io/badge/network-none-2ea043?style=flat-square" alt="No network">
+  <img src="https://img.shields.io/badge/runs-100%25%20on--device-2ea043?style=flat-square" alt="Runs on-device">
+  <img src="https://img.shields.io/github/stars/kabirshah4/Swivel?style=flat-square&color=0a84ff" alt="GitHub stars">
+</p>
 
-Everything runs on your Mac. No video is recorded, stored, or sent anywhere.
+<!-- DEMO: record a 10-20s screen capture (glance between screens, typing follows), save as docs/demo.gif, then uncomment:
+<p align="center"><img src="docs/demo.gif" width="760" alt="Swivel moving keyboard focus as the user looks between two screens"></p>
+-->
+
+## Why
+
+With two or more screens you constantly look at one window and type into another, because focus
+stayed where you left it. Swivel fixes that: glance at a screen and the last window you used there
+gets keyboard focus. No clicking first.
+
+- 👀 **Glance to switch:** focus moves after you look at a screen for ~250 ms
+- 🖥️ **Any number of screens:** 2, 3, 4+ displays, Sidecar iPads count too
+- 🔒 **Private by design:** everything runs on your Mac; no video is recorded, stored or sent anywhere, and the app makes no network connections
+- ⌨️ **Safe while typing:** never switches mid-word or while a password field is active; **⌘F1** pauses it
+- 🧑 **One face only:** locks onto you and ignores anyone else in view
+
+*(Formerly GazeHop.)* · **Website:** https://swivel.gazehop-site.workers.dev
 
 ## How it works
 
@@ -51,7 +74,7 @@ Everything runs on your Mac. No video is recorded, stored, or sent anywhere.
 - **Not notarized**, so macOS shows a warning the first time (see Install).
 - **Full-screen games** lose focus if you glance at another screen; press **⌘F1** to pause.
 
-Found a problem? [Open an issue](https://github.com/kabirshah4/GazeHop/issues) with your Mac,
+Found a problem? [Open an issue](https://github.com/kabirshah4/Swivel/issues) with your Mac,
 macOS version, number of screens, and webcam.
 
 ## Build from source
